@@ -21,7 +21,7 @@ if ( ! defined( 'WPINC' ) ) {
 
 
 // On crée ou on supprimer le post au changement de rôle
-function startup_update_vendor_resource( $user_id, $new_role, $old_role ) {
+function startup_vendor_resources_update( $user_id, $new_role, $old_role ) {
     
     if ( $new_role == 'wc_product_vendors_admin_vendor' ) {
 
@@ -50,12 +50,12 @@ function startup_update_vendor_resource( $user_id, $new_role, $old_role ) {
     }
 }
 
-add_action('set_user_role', 'startup_update_vendor_resource', 10, 3);
+add_action('set_user_role', 'startup_vendor_resources_update', 10, 3);
 
 
 
 // On supprime le post à la suppression de l'utilisateur
-function startup_delete_vendor_resource( $user_id ) {
+function startup_vendor_resources_delete( $user_id ) {
 	global $wpdb;
 
         $user_info = get_userdata( $user_id );
@@ -64,4 +64,30 @@ function startup_delete_vendor_resource( $user_id ) {
         wp_delete_post( $my_post->ID );
         
 }
-add_action( 'delete_user', 'startup_delete_vendor_resource' );
+add_action( 'delete_user', 'startup_vendor_resources_delete' );
+
+
+// Cocher Has resources
+// Fix with js
+function startup_vendor_resources_js(){
+    $user = wp_get_current_user();
+    if ( in_array( 'wc_product_vendors_admin_vendor', (array) $user->roles ) || in_array( 'wc_product_vendors_manager_vendor', (array) $user->roles ) ) { ?>
+        <script type="text/javascript">
+            jQuery( document ).ready(function() {
+                // Cocher Has ressources dans création de produit
+                // Marche po
+                jQuery('body.post-type-product #_wc_booking_has_resources').prop('checked', true);
+            });
+            
+
+            
+        
+        </script>
+<?php }
+}
+
+add_action( 'admin_footer', 'startup_vendor_resources_js' );
+
+
+
+// Préselectionner la bonne resource
