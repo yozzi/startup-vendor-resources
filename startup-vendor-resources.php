@@ -73,11 +73,15 @@ function startup_vendor_resources_js(){
     $user = wp_get_current_user();
     if ( in_array( 'wc_product_vendors_admin_vendor', (array) $user->roles ) || in_array( 'wc_product_vendors_manager_vendor', (array) $user->roles ) ) { ?>
         <script type="text/javascript">
-            jQuery( document ).ready(function() {
                 // Cocher Has ressources dans création de produit
                 // Marche po
                 jQuery('body.post-type-product #_wc_booking_has_resources').prop('checked', true);
-            });
+                
+                // Sélectionner les ressources sont assignées automatiquement
+                
+                
+                // Pré-selectionner la resources du avec comme nom l'id du user
+                // Humhum on dirait que c'est de l'ajax... Va falloir ajouter un post_meta par defaut...
             
 
             
