@@ -30,7 +30,7 @@ function startup_vendor_resources_update( $user_id, $new_role, $old_role ) {
         // insert the post and set the category
         $post_id = wp_insert_post(array (
             'post_type' => 'bookable_resource',
-            'post_title' => $user_id,
+            'post_title' => $user_id . ' - ' . $user_info->user_login,
             'post_content' => $user_id . ' - ' . $user_info->user_login,
             'post_status' => 'publish',
             'comment_status' => 'closed',   // if you prefer
@@ -45,7 +45,8 @@ function startup_vendor_resources_update( $user_id, $new_role, $old_role ) {
 //        }
       
     } else {
-        $my_post = get_page_by_title( $user_id, OBJECT, 'bookable_resource' );
+        $user_info = get_userdata( $user_id );
+        $my_post = get_page_by_title( $user_id . ' - ' . $user_info->user_login, OBJECT, 'bookable_resource' );
         wp_delete_post( $my_post->ID );
     }
 }
@@ -60,7 +61,7 @@ function startup_vendor_resources_delete( $user_id ) {
 
         $user_info = get_userdata( $user_id );
     
-     $my_post = get_page_by_title( $user_id, OBJECT, 'bookable_resource' );
+     $my_post = get_page_by_title( $user_id . ' - ' . $user_info->user_login, OBJECT, 'bookable_resource' );
         wp_delete_post( $my_post->ID );
         
 }
